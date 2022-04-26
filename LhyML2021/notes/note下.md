@@ -720,4 +720,27 @@
 
 <img src="images\image-20220129035906924.png" alt="image-20220129035906924" style="zoom:67%;" />
 
-## 
+## Reinforcement Learning (RL)
+### What is RL?
+当数据很难标记或人类不知道正确答案是什么的时候，选择用RL，但是训练出来的模型能够知道结果好不好。
+<img src="images\2022-04-27-03-13-39.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-03-23-06.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-03-26-29.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-03-28-21.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+RL跟ML的步骤一样
+<img src="images\2022-04-27-03-31-21.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-03-38-45.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-03-40-09.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+负的`total reward`可以当作`loss`
+<img src="images\2022-04-27-03-42-02.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-03-49-09.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Policy Gradient
