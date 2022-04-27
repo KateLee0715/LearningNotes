@@ -744,3 +744,45 @@ RL跟ML的步骤一样
 <img src="images\2022-04-27-03-49-09.png" alt="image-20220129035906924" style="zoom:67%;" />
 
 ### Policy Gradient
+<img src="images\2022-04-27-13-06-10.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-13-08-20.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-13-23-45.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+RL不同的点在于要定义一个参数，这个参数决定执行或不执行这个行为的程度
+<img src="images\2022-04-27-13-26-04.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+这个$s_1$和$a_1$是随便sample出来的，将reward直接作为A
+<img src="images\2022-04-27-14-55-10.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+每一个action都会影响到后面的reward，所以有时候我们需要牺牲短期的利益来获取最大的利益，version0只会使得模型只注重眼前利益。
+<img src="images\2022-04-27-14-59-43.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-16-44-00.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-16-47-10.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-16-58-28.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-17-02-49.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+每次update完参数要重新搜集资料，非常花时间
+<img src="images\2022-04-27-17-04-18.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-17-06-28.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+同样的资料对不同的actor产生的效果是不同的，对变强后的actor可能不适用，所以要重新搜集资料
+<img src="images\2022-04-27-17-09-26.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-17-19-15.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-27-17-21-12.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+加大随机性
+<img src="images\2022-04-27-17-24-14.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Critic
+<img src="images\2022-04-28-04-56-04.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-28-04-59-50.png" alt="image-20220129035906924" style="zoom:67%;" />
