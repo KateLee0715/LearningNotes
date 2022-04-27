@@ -83,8 +83,6 @@ public:
 };
 ```
 
-
-
 #  7. Reverse Integer
 
 ## 题目
@@ -143,8 +141,6 @@ public:
     }
 };
 ```
-
-
 
 # 8. String to Integer (atoi)
 
@@ -309,9 +305,217 @@ public:
 };
 ```
 
+# 29. Divide Two Integers
 
+## 题目
 
+Given two integers `dividend` and `divisor`, divide two integers **without** using multiplication, division, and mod operator.
 
+The integer division should truncate toward zero, which means losing its fractional part. For example, `8.345` would be truncated to `8`, and `-2.7335` would be truncated to `-2`.
 
+Return *the **quotient** after dividing* `dividend` *by* `divisor`.
 
+**Note:** Assume we are dealing with an environment that could only store integers within the **32-bit** signed integer range: `[−2^31, 2^31 − 1]`. For this problem, if the quotient is **strictly greater than** `2^31 - 1`, then return `2^31 - 1`, and if the quotient is **strictly less than** `-2^31`, then return `-2^31`.
+
+ 
+
+**Example 1:**
+
+```
+Input: dividend = 10, divisor = 3
+Output: 3
+Explanation: 10/3 = 3.33333.. which is truncated to 3.
+```
+
+**Example 2:**
+
+```
+Input: dividend = 7, divisor = -3
+Output: -2
+Explanation: 7/-3 = -2.33333.. which is truncated to -2.
+```
+
+## 题目大意
+
+被除数除以除数，求商，但不能进行除法、乘法和求余运算，得到的结果取整数部分，而且整个环境只能存储32位有符号整数。
+
+## 思路
+
+一开始想着用减法，但是如果被除数太大，除数太小，就会TLE，所以我们要把除数变大，再用减法，把除数变大的方法就是用位左移，使得除数最接近被除数。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        if(dividend == 0) return 0;
+        
+        if(divisor == INT_MIN) return dividend == INT_MIN ? 1 : 0;
+        
+        int neg = (dividend > 0) ^ (divisor > 0);
+        
+        // Here is different from the description above.
+		// In practice, we force our dividend to be negative.
+		// Because the range of negative values (2^31) is larger than the range of positive values (2^31 - 1).
+		// If we force dividend to be positive, there may be integer overflow.
+        if(dividend > 0) dividend = 0 - dividend;
+        
+		// Divisor should be positive.
+		// Because we will apply bitwise shift to it.
+		// And we have handled the case when divisor is INT_MIN.
+        if(divisor < 0) divisor = 0 - divisor;
+        
+        int ans = 0;
+        
+        while(dividend <= -divisor){
+            int tmp = divisor, step = 1;
+            
+            while(tmp < 1<<30 && -tmp >= dividend){
+                tmp <<= 1;
+                step <<= 1;
+            }
+            
+            if(-tmp < dividend){
+                tmp >>= 1;
+                step >>= 1;
+            }
+            
+            dividend += tmp;
+            ans -= step;
+        }
+        
+        if(neg) return ans;
+        else return ans == INT_MIN ? INT_MAX : -ans;
+    }
+};
+```
+
+# 36. Valid Sudoku
+
+## 题目
+
+Determine if a `9 x 9` Sudoku board is valid. Only the filled cells need to be validated **according to the following rules**:
+
+1. Each row must contain the digits `1-9` without repetition.
+2. Each column must contain the digits `1-9` without repetition.
+3. Each of the nine `3 x 3` sub-boxes of the grid must contain the digits `1-9` without repetition.
+
+**Note:**
+
+- A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+- Only the filled cells need to be validated according to the mentioned rules.
+
+ 
+
+**Example 1:**
+
+![img](https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Sudoku-by-L2G-20050714.svg/250px-Sudoku-by-L2G-20050714.svg.png)
+
+```
+Input: board = 
+[["5","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: true
+```
+
+**Example 2:**
+
+```
+Input: board = 
+[["8","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+Output: false
+Explanation: Same as Example 1, except with the 5 in the top left corner being modified to 8. Since there are two 8's in the top left 3x3 sub-box, it is invalid.
+```
+
+## 题目大意
+
+根据数独的规则判断一个数独是否成立。
+
+## 思路
+
+按照规则写判断函数建立几个数组去存储，避免重复判断。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    bool block[3][3] = {false};
+    bool row[9] = {false};
+    bool col[9] = {false};
+    
+    bool validBlock(vector<vector<char>>& board, int r, int c){
+        int rr = r / 3, cc = c / 3;
+        int cnt[10] = {0};
+        for(int i = rr * 3; i < (rr + 1) * 3; i++){
+            for(int j = cc * 3; j < (cc + 1) * 3; j++){
+                if(board[i][j] == '.') continue;
+                if(cnt[board[i][j] - '0']) return false;
+                cnt[board[i][j] - '0']++;
+            }
+        }
+        return true;
+    }
+    
+    bool validRow(vector<vector<char>>& board, int r){
+        int cnt[10] = {0};
+        for(int i = 0; i < 9; i++){
+            if(board[r][i] == '.') continue;
+            if(cnt[board[r][i] - '0']) return false;
+            cnt[board[r][i] - '0']++;
+        }
+        return true;
+    }
+    
+    bool validCol(vector<vector<char>>& board, int c){
+        int cnt[10] = {0};
+        for(int i = 0; i < 9; i++){
+            if(board[i][c] == '.') continue;
+            if(cnt[board[i][c] - '0']) return false;
+            cnt[board[i][c] - '0']++;
+        }
+        return true;
+    }
+    
+    bool isValidSudoku(vector<vector<char>>& board) {
+        for(int r = 0; r < 9; r++){
+            for(int c = 0; c < 9; c++){
+                if(board[r][c] == '.') continue;
+                if(!block[r/3][c/3]){
+                    bool flag = validBlock(board, r, c);
+                    if(!flag) return false;
+                    block[r/3][c/3] = true;
+                }
+                if(!row[r]){
+                    bool flag = validRow(board, r);
+                    if(!flag) return false;
+                    row[r] = true;
+                }
+                if(!col[c]){
+                    bool flag = validCol(board, c);
+                    if(!flag) return false;
+                    col[c] = true;
+                }
+            }
+        }
+        return true;
+    }
+};
+```
 
