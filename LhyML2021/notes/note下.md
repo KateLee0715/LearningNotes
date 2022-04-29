@@ -785,4 +785,44 @@ RL不同的点在于要定义一个参数，这个参数决定执行或不执行
 ### Critic
 <img src="images\2022-04-28-04-56-04.png" alt="image-20220129035906924" style="zoom:67%;" />
 
+这个需要玩完整场游戏得到所有的训练资料才能进行训练
 <img src="images\2022-04-28-04-59-50.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+这个不需要玩完整场游戏，只需要得到四个数值就行
+<img src="images\2022-04-28-16-27-10.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+两个方法得出的结果会有微妙的差异
+<img src="images\2022-04-28-16-49-22.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-28-16-52-19.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-28-17-03-28.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+采取$a_t$得到的期望reward减去随便sample一个action得到的期望reward
+<img src="images\2022-04-28-17-12-40.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+训练Actor、Critic的小技巧
+<img src="images\2022-04-28-17-20-50.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-28-17-24-24.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Reward Shaping
+当reward绝大部分为0时，就要设定额外的reward，来保证训练的正常进行，这就是reward shaping
+<img src="images\2022-04-28-17-48-57.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-28-18-02-09.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-28-20-13-47.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### No Reward
+<img src="images\2022-04-28-20-21-07.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+需要一些Experts进行示范
+<img src="images\2022-04-28-22-05-49.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+会直接复制人类的行为，遇到一些人类不会遇到的状况会不知道怎么处理
+<img src="images\2022-04-28-22-08-23.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+机器精力有限，它只能选择性地去模仿一些行为，但它不知道哪些行为是好的，哪些行为是不好的
+<img src="images\2022-04-28-22-53-42.png" alt="image-20220129035906924" style="zoom:67%;" />
+
