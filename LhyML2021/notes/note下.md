@@ -826,3 +826,95 @@ RL不同的点在于要定义一个参数，这个参数决定执行或不执行
 机器精力有限，它只能选择性地去模仿一些行为，但它不知道哪些行为是好的，哪些行为是不好的
 <img src="images\2022-04-28-22-53-42.png" alt="image-20220129035906924" style="zoom:67%;" />
 
+### Inverse Reinforcement Learning
+<img src="images\2022-04-29-13-46-30.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-29-13-47-33.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-29-13-52-02.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-29-13-54-31.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-29-13-56-15.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+培养机器有达成目标的能力
+<img src="images\2022-04-29-14-00-17.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Learn More
+<img src="images\2022-04-29-14-41-25.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+## Network Compression
+资源限制所以模型需要压缩
+<img src="images\2022-04-29-17-06-56.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-29-17-09-00.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Network Pruning
+树大必有枯枝，要把那些无用的参数找出来，然后去掉
+<img src="images\2022-04-29-17-11-33.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-29-17-15-39.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+对参数进行修剪不好实作，不好实现，不好用GPU加速，因为形状不规则
+<img src="images\2022-04-29-17-24-29.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+修剪神经元比较容易实现
+<img src="images\2022-04-29-17-27-13.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+大的network比较好train，大的network逐渐变小正确率没差多少，但直接train小的network就没办法得到跟大的network差不多的正确率
+<img src="images\2022-04-29-17-33-29.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+大乐透假说，一人得道鸡犬升天
+<img src="images\2022-04-29-17-37-12.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+大的network里面容易出现训练得起来的参数，小的network中奖几率比较小
+<img src="images\2022-04-29-17-39-54.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-29-17-46-15.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-29-18-01-18.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Knowledge Distillation
+学生学习老师得出的结果比直接学习正确答案效果要好，因为老师的结果具有较高的容错性，而且还能学到它没有见过的样本。
+<img src="images\2022-04-29-18-24-18.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+Ensemble指的是多个模型投票的结果，或者多个模型得出的结果取平均值。
+让学生模型去学习平均值，就能达到压缩的效果。
+<img src="images\2022-04-30-00-23-46.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+小技巧：可以让老师模型结果中每一个类别得到的分数比较平滑，学生模型学起来没那么困难
+<img src="images\2022-04-30-02-35-05.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Parameter Quantization
+<img src="images\2022-04-30-02-58-54.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+用Binary Connect不容易overfitting，所以有时对于模型的效果会变好
+<img src="images\2022-04-30-03-05-17.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Depthwise Separable Convolution
+通过改变模型的架构来减少参数量
+<img src="images\2022-04-30-04-17-43.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-30-04-16-31.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-30-04-20-27.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-30-04-23-54.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-30-04-29-22.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-04-30-04-33-03.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Dynamic Computation
+希望Network可以根据运算资源的不同自由地调整其运算量
+
+Network自由地调整其深度
+<img src="images\2022-04-30-04-41-20.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+自由地调整其宽度
+<img src="images\2022-04-30-04-43-21.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+Network可以自行判断调整其运算量
+<img src="images\2022-04-30-04-49-41.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+
