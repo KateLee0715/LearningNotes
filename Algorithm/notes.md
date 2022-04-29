@@ -519,3 +519,252 @@ public:
 };
 ```
 
+# 38. Count and Say
+
+## 题目
+
+The **count-and-say** sequence is a sequence of digit strings defined by the recursive formula:
+
+- `countAndSay(1) = "1"`
+- `countAndSay(n)` is the way you would "say" the digit string from `countAndSay(n-1)`, which is then converted into a different digit string.
+
+To determine how you "say" a digit string, split it into the **minimal** number of groups so that each group is a contiguous section all of the **same character.** Then for each group, say the number of characters, then say the  character. To convert the saying into a digit string, replace the counts with a number and concatenate every saying.
+
+For example, the saying and conversion for digit string `"3322251"`:
+
+![img](https://assets.leetcode.com/uploads/2020/10/23/countandsay.jpg)
+
+Given a positive integer `n`, return *the* `nth` *term of the **count-and-say** sequence*.
+
+ 
+
+**Example 1:**
+
+```
+Input: n = 1
+Output: "1"
+Explanation: This is the base case.
+```
+
+**Example 2:**
+
+```
+Input: n = 4
+Output: "1211"
+Explanation:
+countAndSay(1) = "1"
+countAndSay(2) = say "1" = one 1 = "11"
+countAndSay(3) = say "11" = two 1's = "21"
+countAndSay(4) = say "21" = one 2 + one 1 = "12" + "11" = "1211"
+```
+
+## 题目大意
+
+像一种递归的形式，将n-1对应的字符串说出来。
+
+## 思路
+
+写一个递归，出口条件是当`n = 1`时，返回`"1"`；获取`n - 1`时的字符串，然后循环遍历将其说出来。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    string countAndSay(int n) {
+        if(n == 1) return "1";
+        string pre = countAndSay(n - 1);
+        
+        int cnt = 1, x = pre[0] - '0';
+        string ans = "";
+        
+        for(int i = 1; i < pre.size(); i++){
+            if(pre[i] != pre[i-1]){
+                ans += cnt + '0';
+                ans += x + '0';
+                cnt = 1;
+                x = pre[i] - '0';
+            }else{
+                cnt++;
+            }
+        }
+        
+        ans += cnt + '0';
+        ans += x + '0';
+        
+        return ans;
+    }
+};
+```
+
+# 50. Pow(x, n)
+
+## 题目
+
+Implement [pow(x, n)](http://www.cplusplus.com/reference/valarray/pow/), which calculates `x` raised to the power `n` (i.e., `x^n`).
+
+ 
+
+**Example 1:**
+
+```
+Input: x = 2.00000, n = 10
+Output: 1024.00000
+```
+
+**Example 2:**
+
+```
+Input: x = 2.10000, n = 3
+Output: 9.26100
+```
+
+**Example 3:**
+
+```
+Input: x = 2.00000, n = -2
+Output: 0.25000
+Explanation: 2^(-2) = 1/2^2 = 1/4 = 0.25
+```
+
+## 题目大意
+
+求`x`的`n`次幂
+
+## 思路
+
+这个要是直接乘会TLE，所以我们用到了快速幂的方法（直接套模板），注意处理边界问题。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    double myPow(double x, int n) {
+        double res = 1.0;
+        bool neg = false;
+        if(n == INT_MIN){
+            x *= x;
+            n = 1 << 30;
+            neg = true;
+        }else if(n < 0){
+            n = 0 - n;
+            neg = true;
+        }
+        while(n){
+            if(n & 1){
+                res *= x;
+            }
+            x *= x;
+            n >>= 1;
+        }
+        return neg ? 1.0 / res : res;
+    }
+};
+```
+
+# 503. Next Greater Element II
+
+## 题目
+
+Given a circular integer array `nums` (i.e., the next element of `nums[nums.length - 1]` is `nums[0]`), return *the **next greater number** for every element in* `nums`.
+
+The **next greater number** of a number `x`  is the first greater number to its traversing-order next in the array,  which means you could search circularly to find its next greater number. If it doesn't exist, return `-1` for this number.
+
+ 
+
+**Example 1:**
+
+```
+Input: nums = [1,2,1]
+Output: [2,-1,2]
+Explanation: The first 1's next greater number is 2; 
+The number 2 can't find next greater number. 
+The second 1's next greater number needs to search circularly, which is also 2.
+```
+
+**Example 2:**
+
+```
+Input: nums = [1,2,3,4,3]
+Output: [2,3,4,-1,4]
+```
+
+## 题目大意
+
+求每个元素下一个比它更大的元素。
+
+## 思路
+
+一开始想着用队列和栈实现，顺序遍历，队列顺序存着从小到大的数，栈顺序存着从大到小的数：
+
+```c++
+class Solution {
+public:
+    int ans[10005];
+    int q[10005];
+    int stk[10005];
+    int hh = 0, tt = -1, top = -1;
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        vector<int> res;
+        q[++tt] = 0;
+        stk[++top] = 0;
+        for(int i = 1; i < nums.size(); i++){
+            while(top != -1 && nums[i] > nums[stk[top]]){
+                int k = stk[top--];
+                ans[k] = i;
+            }
+            stk[++top] = i;
+            if(nums[i] > nums[q[tt]]){
+                q[++tt] = i;
+            }
+        }
+        
+        while(top != -1){
+            int k = stk[top--];
+            while(hh <= tt && nums[q[hh]] <= nums[k]) hh++;
+            if(hh > tt){
+                ans[k] = -1;
+            }else{
+                ans[k] = q[hh];
+            }
+        }
+        
+        for(int i = 0; i < nums.size(); i++){
+            if(ans[i] != -1){
+                res.push_back(nums[ans[i]]);
+            }else{
+                res.push_back(-1);
+            }
+        }
+        
+        return res;
+    }
+};
+```
+
+结果还不错，不过有些复杂
+
+## 代码
+
+看了官方解答，代码简洁了不少
+
+```c++
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        stack<int> s;
+        int n = nums.size();
+        vector<int> res(n, -1);
+        
+        for(int i = 2 * n - 1; i >= 0; i--){
+            while(!s.empty() && nums[i%n] >= s.top()) s.pop();
+            if(i < n && !s.empty() && nums[i] < s.top()) res[i] = s.top();
+            s.push(nums[i%n]);
+        }
+        
+        return res;
+    }
+};
+```
+
