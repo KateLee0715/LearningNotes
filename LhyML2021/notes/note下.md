@@ -917,4 +917,111 @@ Network自由地调整其深度
 Network可以自行判断调整其运算量
 <img src="images\2022-04-30-04-49-41.png" alt="image-20220129035906924" style="zoom:67%;" />
 
+### PPO
+<img src="images\2022-05-01-01-28-27.png" alt="image-20220129035906924" style="zoom:67%;" />
 
+<img src="images\2022-05-01-01-28-27.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+在对q做sample时，sample到右边的可能性非常大，所以期望值为正数的可能性非常大。但也有可能sample到左边，一旦sample到左边，$f(x)$为负数，乘以一个非常大的weight，那么它的期望值就会被中和成负数。
+<img src="images\2022-05-02-13-49-24.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-02-14-21-59.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-02-14-35-41.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+PPO易于计算，$\theta$和$\theta'$之间距离要相近，这里的相近指的是行为也就是action相近，而不是参数上的相近。
+<img src="images\2022-05-03-00-26-15.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-03-01-47-55.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-03-02-00-29.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Q-Learning
+在state s 强制使用 action a
+<img src="images\2022-05-03-02-31-30.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+求出Q这个function就能找到更好的$\pi'$，然后重新求Q-function
+<img src="images\2022-05-03-03-30-01.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-03-03-38-06.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-03-03-46-57.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-03-03-50-06.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+一些效果不好的action在一开始也要偶尔试试，否则你永远不知道它的效果是不是真的不好
+<img src="images\2022-05-03-03-54-19.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-03-04-04-05.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-03-04-04-44.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-03-04-09-28.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Double DQN
+一般估算出来的Q-value都会比较大
+<img src="images\2022-05-03-19-15-08.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+为什么Q-value总是被高估？因为总是会选择Q-value被高估的那个action加上$r_t$作为target
+<img src="images\2022-05-03-19-20-44.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+$Q$负责找出$a$，$Q'$负责算出值；找出$a$的那个Q用的是update的那个Q-network，算出值的$Q'$用的是freeze的那个Q-network
+<img src="images\2022-05-03-19-29-25.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+只改Q-network的架构
+<img src="images\2022-05-04-00-28-42.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+可以通过更改V(s)的值更改每个action的值，而不需要sample到每个action，节省时间
+<img src="images\2022-05-04-00-35-24.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+A要进行Normalize才有更大的constraint去更新V
+<img src="images\2022-05-04-00-47-01.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+TD error大的data应该更高几率被sample到，这样才能更好地update参数
+<img src="images\2022-05-04-01-19-18.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+MC和TD的平衡
+<img src="images\2022-05-04-01-29-03.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+noise在每个episode开始时才sample出来加到Q-network上
+<img src="images\2022-05-04-01-52-14.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-04-01-57-06.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+Q-value只是一个期望值，里面的distribution不得而知，有可能同一个Q-value会有不一样的distribution，就会造成information loss
+<img src="images\2022-05-04-02-01-35.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-04-02-09-05.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Q-Learning for Continuous Actions
+<img src="images\2022-05-04-02-41-03.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-04-02-46-12.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-04-02-48-31.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+## Life Long Learning
+<img src="images\2022-05-04-03-22-37.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+机器依次学习任务时，可能学了当前任务会把之前学的任务遗忘了（正确率低），但是把所有任务混在一起学习又不会有这种情况
+<img src="images\2022-05-04-03-24-58.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-04-03-25-41.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-04-03-26-45.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+为什么一定要life long learning 而不能 Multi-task training，因为存储空间有限，不可能一直存储着之前的所有任务，而且训练所有任务也比较困难
+<img src="images\2022-05-04-03-27-59.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+为什么不能一个模型训练一个任务，因为不能存储那么多模型，而且任务之间不能互通有无
+<img src="images\2022-05-04-03-31-58.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+Transfer只注重第二个任务做得好不好，Life-Long注重所有的任务都要做得好
+<img src="images\2022-05-04-03-34-30.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+评估Life-Long Learning的好坏
+遗忘的程度
+<img src="images\2022-05-04-03-43-55.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+
+<img src="images\2022-05-04-03-46-34.png" alt="image-20220129035906924" style="zoom:67%;" />
