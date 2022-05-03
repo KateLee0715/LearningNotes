@@ -768,3 +768,116 @@ public:
 };
 ```
 
+# 54. Spiral Matrix
+
+## 题目
+
+Given an `m x n` `matrix`, return *all elements of the* `matrix` *in spiral order*.
+
+ 
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2020/11/13/spiral1.jpg)
+
+```
+Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+Output: [1,2,3,6,9,8,7,4,5]
+```
+
+**Example 2:**
+
+![img](https://assets.leetcode.com/uploads/2020/11/13/spiral.jpg)
+
+```
+Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+```
+
+## 题目大意
+
+将矩阵中的元素按蛇形顺序打印出来
+
+## 思路
+
+一开始想着一圈一圈由外向里地打印，可能判断条件写得不够好，导致用时长：
+
+```c++
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int m = matrix.size(), n = matrix[0].size();
+        vector<int> res;
+        int cnt = 0;
+        
+        do{
+            for(int i = cnt; i < n + cnt; i++){
+                res.push_back(matrix[cnt][i]);
+            }
+            
+            for(int i = cnt + 1; i < m + cnt; i++){
+                res.push_back(matrix[i][n+cnt-1]);
+            }
+            
+            for(int i = cnt + n - 2; m >= 2 && i >= cnt; i--){
+                res.push_back(matrix[m+cnt-1][i]);
+            }
+            
+            for(int i = m + cnt - 2; n >= 2 && i >= cnt + 1; i--){
+                res.push_back(matrix[i][cnt]);
+            }
+            
+            m -= 2;
+            n -= 2;
+            cnt++;
+        }while(m > 0 && n > 0);
+        
+        return res;
+    }
+};
+```
+
+## 代码
+
+看了一个大佬的代码，感觉比我写的清晰多了，通俗易懂多了，有条理多了，复刻如下：
+
+```c++
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int m = matrix.size(), n = matrix[0].size();
+        int st_row = 0, ed_row = m - 1, st_col = 0, ed_col = n - 1;
+        int cnt = 0, tol = m * n;
+        vector<int> res;
+        
+        while(cnt < tol){
+            for(int i = st_col; cnt < tol && i <= ed_col; i++){
+                res.push_back(matrix[st_row][i]);
+                cnt++;
+            }
+            st_row++;
+            
+            for(int i = st_row; cnt < tol && i <= ed_row; i++){
+                res.push_back(matrix[i][ed_col]);
+                cnt++;
+            }
+            ed_col--;
+            
+            for(int i = ed_col; cnt < tol && i >= st_col; i--){
+                res.push_back(matrix[ed_row][i]);
+                cnt++;
+            }
+            ed_row--;
+            
+            for(int i = ed_row; cnt < tol && i >= st_row; i--){
+                res.push_back(matrix[i][st_col]);
+                cnt++;
+            }
+            st_col++;
+        }
+        
+        return res;
+    }
+};
+```
+
