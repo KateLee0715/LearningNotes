@@ -1023,5 +1023,6 @@ Transfer只注重第二个任务做得好不好，Life-Long注重所有的任务
 遗忘的程度
 <img src="images\2022-05-04-03-43-55.png" alt="image-20220129035906924" style="zoom:67%;" />
 
-
+还没看到任务就已经学到的程度
 <img src="images\2022-05-04-03-46-34.png" alt="image-20220129035906924" style="zoom:67%;" />
+
