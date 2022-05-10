@@ -1026,3 +1026,142 @@ Transfer只注重第二个任务做得好不好，Life-Long注重所有的任务
 还没看到任务就已经学到的程度
 <img src="images\2022-05-04-03-46-34.png" alt="image-20220129035906924" style="zoom:67%;" />
 
+### Selective Synaptic Plasticity(Regularization-based Approach)
+<img src="images\2022-05-05-03-57-30.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+一些对之前任务重要的参数尽量不变，只改变对之前任务不重要的参数
+<img src="images\2022-05-05-04-03-12.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-04-07-13.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-04-13-09.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-04-14-33.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+$b_i$的计算方法
+<img src="images\2022-05-05-04-20-49.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+GEM会偷存之前任务少量的资料
+<img src="images\2022-05-05-04-27-09.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Additional Neural Resource Allocation
+原来任务的参数不动，新的任务新增一些新的参数，训练新的参数，但是随着任务的增加内存会爆炸
+<img src="images\2022-05-05-04-35-43.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+PackNet先开一个比较大的Network，然后每次一个任务进来就用部分参数
+CPG是上述两种方法的结合，一个任务进来既可以用部分参数，也可以开辟新的参数
+<img src="images\2022-05-05-04-50-50.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Memory Reply
+<img src="images\2022-05-05-04-58-47.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+每个task的class数量都不一样怎么办
+<img src="images\2022-05-05-05-04-57.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+学习任务的顺序很重要
+<img src="images\2022-05-05-05-08-00.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+## Meta Learning
+<img src="images\2022-05-05-06-03-20.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-04-38.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-07-23.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-09-38.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-10-45.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+训练任务里的训练资料和测试资料用来训练出学习算法，而测试任务里的训练资料用来训练出classifier，测试资料用来测试学习算法
+<img src="images\2022-05-05-06-14-57.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### ML v.s. Meta
+<img src="images\2022-05-05-06-39-01.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-41-28.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-43-15.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-45-36.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-47-58.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-05-06-50-51.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+相似的地方
+<img src="images\2022-05-05-06-53-50.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### What is learnable in a learning algorithm?
+参数初始化的好坏直接影响到最终模型的好坏
+<img src="images\2022-05-08-00-21-53.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+参数的初始化也要进行学习
+<img src="images\2022-05-08-00-25-00.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-00-28-23.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-00-34-32.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+meta learning可以看做解domain adaptation的一种方法
+<img src="images\2022-05-08-01-08-40.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+左边指初始化的参数可以很轻易地找到各个任务的最佳参数，右边指初始化的参数本身就已经跟各个任务的最佳参数很接近了，实验证明原因是右边。
+<img src="images\2022-05-08-01-16-29.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-01-21-34.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+optimizer也可以learn出来，LSTM那条线就是learn出来的optimizer
+<img src="images\2022-05-08-01-33-03.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-01-43-56.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+首先agent输出一些network的参数，把这些参数安在network上，将训练资料喂进去，训练network，再将测试资料喂进去得到该模型的准确率，将准确率作为reward更新agent的参数。
+<img src="images\2022-05-08-01-52-06.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-01-59-37.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+DARTS将loss变得可微
+<img src="images\2022-05-08-02-00-10.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-02-01-48.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+自动找data augmentation的方法
+<img src="images\2022-05-08-02-02-33.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-02-05-44.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-02-06-52.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-02-08-47.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Applications
+<img src="images\2022-05-08-02-14-07.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-02-14-33.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-02-18-52.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-08-02-19-23.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### MAML
+<img src="images\2022-05-09-02-12-47.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-09-02-18-06.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-09-02-19-49.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-09-02-20-44.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-09-02-23-37.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+训练时初始参数只update一次，因为快；期望初始参数update一次就有不错的效果；在测试的时候，初始参数可以update很多次
+<img src="images\2022-05-09-02-44-05.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+例子对比
+<img src="images\2022-05-09-03-03-26.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-09-03-04-12.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-09-03-22-07.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-09-03-23-35.png" alt="image-20220129035906924" style="zoom:67%;" />
