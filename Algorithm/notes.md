@@ -881,3 +881,195 @@ public:
 };
 ```
 
+# 73. Set Matrix Zeroes
+
+## 题目
+
+Given an `m x n` integer matrix `matrix`, if an element is `0`, set its entire row and column to `0`'s.
+
+You must do it [in place](https://en.wikipedia.org/wiki/In-place_algorithm).
+
+ 
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2020/08/17/mat1.jpg)
+
+```
+Input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+Output: [[1,0,1],[0,0,0],[1,0,1]]
+```
+
+**Example 2:**
+
+![img](https://assets.leetcode.com/uploads/2020/08/17/mat2.jpg)
+
+```
+Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+Output: [[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+```
+
+## 题目大意
+
+一个位置有0，那么这个0所在的行和列全部置为0
+
+## 思路
+
+一开始想的是遍历，到0了就把行列变为0，并标记一下该行/该列已经变为0，同时为了区分原先是0还是后面变为0做了标记，但是时间和空间不理想。后来看了某位大佬的做法，是遍历的时候先不置为0，看到0就把0的坐标放入vector中，最后再遍历一次把他们所在的行和列置为0。
+
+```c++
+class Solution {
+public:
+    bool flag[205][205];
+    bool row[205];
+    bool col[205];
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m = matrix.size(), n = matrix[0].size();
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(matrix[i][j]) continue;
+                if(flag[i][j]) continue;
+                if(!row[i]){
+                    for(int k = 0; k < n; k++){
+                        if(!matrix[i][k]) continue;
+                        matrix[i][k] = 0;
+                        flag[i][k] = true;
+                    }
+                    row[i] = true;
+                }
+                if(!col[j]){
+                    for(int k = 0; k < m; k++){
+                        if(!matrix[k][j]) continue;
+                        matrix[k][j] = 0;
+                        flag[k][j] = true;
+                    }
+                    col[j] = true;
+                }
+            }
+        }
+    }
+};
+```
+
+## 代码
+
+```c++
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m = matrix.size(), n = matrix[0].size();
+        vector<pair<int, int>> v;
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(!matrix[i][j]) v.push_back(make_pair(i, j));
+            }
+        }
+        
+        for(int k = 0; k < v.size(); k++){
+            int c = 0, r = 0;
+            while(c < n){
+                matrix[v[k].first][c] = 0;
+                c++;
+            }
+            
+            while(r < m){
+                matrix[r][v[k].second] = 0;
+                r++;
+            }
+        }
+    }
+};
+```
+
+# 116. Populating Next Right Pointers in Each Node
+
+## 题目
+
+You are given a **perfect binary tree** where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
+
+```
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+```
+
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to `NULL`.
+
+Initially, all next pointers are set to `NULL`.
+
+ 
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2019/02/14/116_sample.png)
+
+```
+Input: root = [1,2,3,4,5,6,7]
+Output: [1,#,2,3,#,4,5,6,7,#]
+Explanation: Given the above perfect binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B. The serialized output is in level order as connected by the next pointers, with '#' signifying the end of each level.
+```
+
+**Example 2:**
+
+```
+Input: root = []
+Output: []
+```
+
+## 题目大意
+
+用`next`指针指向节点右边第一个节点，如果没有指向`null`
+
+## 思路
+
+用bfs遍历每一层，如果那一层还有剩节点那就指向队头的节点，如果没有就指向null
+
+## 代码
+
+```c++
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+*/
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if(root == nullptr) return nullptr;
+        queue<Node*> q;
+        q.push(root);
+        while(q.size()){
+            int cnt = q.size();
+            while(cnt){
+                Node* tmp = q.front();
+                q.pop();
+                cnt--;
+                if(cnt){
+                    tmp->next = q.front();
+                }
+                if(tmp->left) q.push(tmp->left);
+                if(tmp->right) q.push(tmp->right);
+            }
+            
+        }
+        return root;
+    }
+};
+```
+
