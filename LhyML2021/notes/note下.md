@@ -1164,4 +1164,76 @@ DARTS将loss变得可微
 
 <img src="images\2022-05-09-03-22-07.png" alt="image-20220129035906924" style="zoom:67%;" />
 
+### MATH
 <img src="images\2022-05-09-03-23-35.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### MAML - Real Implementation
+<img src="images\2022-05-10-17-52-09.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Reptile
+<img src="images\2022-05-10-17-55-06.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-17-56-11.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-17-57-14.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-18-00-34.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Gradient Descent as LSTM
+<img src="images\2022-05-10-18-08-47.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+无论input和output有多长，参数量都是一样的，只用一个函数f
+<img src="images\2022-05-10-18-18-39.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+LSTM特别的地方在于c的资讯能存在很久，因为c的变化太小了
+<img src="images\2022-05-10-19-40-21.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-19-51-47.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-19-53-22.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-19-57-05.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-22-42-53.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-22-56-02.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-23-11-42.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-23-15-23.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-10-23-19-28.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+### Metric-based Approach
+<img src="images\2022-05-10-23-37-29.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-11-01-56-04.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-11-02-30-28.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+两个CNN的参数可以一样也可以不一样
+<img src="images\2022-05-11-02-36-04.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-11-02-39-37.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+同一张人脸距离要拉近，不同人脸距离要拉远，这样train出来的embedding才能尽可能地保留有用的资讯
+<img src="images\2022-05-11-02-42-59.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+怎么计算两个embedding的相似度？
+<img src="images\2022-05-11-02-49-45.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-11-02-53-21.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-11-02-57-40.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-11-02-59-33.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+把testing data的embedding放在每个training data的embedding的后面
+<img src="images\2022-05-11-03-00-49.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+用一个generator生成一个人脸的多种样子
+<img src="images\2022-05-11-03-04-42.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-11-03-09-42.png" alt="image-20220129035906924" style="zoom:67%;" />
+
+<img src="images\2022-05-11-03-13-21.png" alt="image-20220129035906924" style="zoom:67%;" />
