@@ -1073,3 +1073,139 @@ public:
 };
 ```
 
+# 122. Best Time to Buy and Sell Stock II
+
+## 题目
+
+You are given an integer array `prices` where `prices[i]` is the price of a given stock on the `ith` day.
+
+On each day, you may decide to buy and/or sell the stock. You can only hold **at most one** share of the stock at any time. However, you can buy it then immediately sell it on the **same day**.
+
+Find and return *the **maximum** profit you can achieve*.
+
+ 
+
+**Example 1:**
+
+```
+Input: prices = [7,1,5,3,6,4]
+Output: 7
+Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
+Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+Total profit is 4 + 3 = 7.
+```
+
+**Example 2:**
+
+```
+Input: prices = [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+Total profit is 4.
+```
+
+**Example 3:**
+
+```
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: There is no way to make a positive profit, so we never buy the stock to achieve the maximum profit of 0.
+```
+
+## 题目大意
+
+买卖股票，每天最多只能持有一股，每天都能买卖无数次，求能赚到利润的最大值
+
+## 思路
+
+其实就是一个贪心问题，只要股票明天升，那就今天买明天卖
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int ans = 0;
+        for(int i = 0; i < prices.size() - 1; i++){
+            if(prices[i+1] > prices[i]) ans += prices[i+1] - prices[i];
+        }
+        return ans;
+    }
+};
+```
+
+# 131. Palindrome Partitioning
+
+## 题目
+
+Given a string `s`, partition `s` such that every substring of the partition is a **palindrome**. Return all possible palindrome partitioning of `s`.
+
+A **palindrome** string is a string that reads the same backward as forward.
+
+ 
+
+**Example 1:**
+
+```
+Input: s = "aab"
+Output: [["a","a","b"],["aa","b"]]
+```
+
+**Example 2:**
+
+```
+Input: s = "a"
+Output: [["a"]]
+```
+
+## 题目大意
+
+给定一个字符串，将其分割成每个字符串都是回文的所有组合
+
+## 思路
+
+判断回文用动态规划，中间那段字符串是回文且两端字母相同就是回文，否则不是；列举所有组合用深搜。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    bool pal[20][20];
+    void init(string s){
+        int n = s.size();
+        for(int i = 0; i < n; i++){
+            pal[i][i] = true;
+            pal[i][i+1] = true;
+        }
+        for(int len = 2; len <= n; len++){
+            for(int i = 0; i <= n - len; i++){
+                if(pal[i+1][i+len-1] && s[i] == s[i+len-1]) pal[i][i+len] = true;
+                else pal[i][i+len] = false;
+            }
+        }
+    }
+    void dfs(vector<vector<string>>& res, int st, string s, vector<string>& cur){
+        if(st == s.size()){
+            res.push_back(cur);
+            return;
+        }
+        for(int ed = st+1; ed <= s.size(); ed++){
+            if(pal[st][ed]){
+                cur.push_back(s.substr(st, ed-st));
+                dfs(res, ed, s, cur);
+                cur.pop_back();
+            }
+        }
+    }
+    vector<vector<string>> partition(string s) {
+        init(s);
+        vector<vector<string>> res;
+        vector<string> cur;
+        dfs(res, 0, s, cur);
+        return res;
+    }
+};
+```
+
