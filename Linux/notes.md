@@ -54,3 +54,11 @@ linux是一个开源、免费的操作系统
 ## 远程文件传输Xftp
 跟上述类似
 <img src="images/2022-05-24-02-30-23.png" style="zoom:67%;">
+
+## vim
+### 常用的三种模式
+<img src="images/2022-05-25-00-22-40.png" style="zoom:67%;">
+<img src="images/2022-05-25-00-23-59.png" style="zoom:67%;">
+### 快捷键
+<img src="images/2022-05-25-00-25-08.png" style="zoom:67%;">
+<img src="images/2022-05-25-00-26-02.png" style="zoom:67%;">
