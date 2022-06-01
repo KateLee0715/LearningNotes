@@ -1286,3 +1286,226 @@ public:
 };
 ```
 
+# 150. Evaluate Reverse Polish Notation
+
+## 题目
+
+Evaluate the value of an arithmetic expression in [Reverse Polish Notation](http://en.wikipedia.org/wiki/Reverse_Polish_notation).
+
+Valid operators are `+`, `-`, `*`, and `/`. Each operand may be an integer or another expression.
+
+**Note** that division between two integers should truncate toward zero.
+
+It is guaranteed that the given RPN expression is always valid. That  means the expression would always evaluate to a result, and there will  not be any division by zero operation.
+
+ 
+
+**Example 1:**
+
+```
+Input: tokens = ["2","1","+","3","*"]
+Output: 9
+Explanation: ((2 + 1) * 3) = 9
+```
+
+**Example 2:**
+
+```
+Input: tokens = ["4","13","5","/","+"]
+Output: 6
+Explanation: (4 + (13 / 5)) = 6
+```
+
+**Example 3:**
+
+```
+Input: tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+Output: 22
+Explanation: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+= ((10 * (6 / (12 * -11))) + 17) + 5
+= ((10 * (6 / -132)) + 17) + 5
+= ((10 * 0) + 17) + 5
+= (0 + 17) + 5
+= 17 + 5
+= 22
+```
+
+## 题目大意
+
+计算一个后缀表达式的值
+
+## 思路
+
+用栈的方式，建立一个数字栈，一遍历到运算符，就把栈顶的两个数字拿出来运算，再压入栈中，最后输出栈顶的结果。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        int n = tokens.size();
+        stack<int> s;
+        for(int i = 0; i < n; i++){
+            if(tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" || tokens[i] == "/"){
+                char op = tokens[i][0];
+                int num2 = s.top();
+                s.pop();
+                int num1 = s.top();
+                s.pop();
+                if(op == '+'){
+                    s.push(num1 + num2);
+                }else if(op == '-'){
+                    s.push(num1 - num2);
+                }else if(op == '*'){
+                    s.push(num1 * num2);
+                }else{
+                    s.push(num1 / num2);
+                }
+            }else{
+                int x = stoi(tokens[i]);
+                s.push(x);
+            }
+        }
+        
+        return s.top();
+    }
+};
+```
+
+# 162. Find Peak Element
+
+## 题目
+
+A peak element is an element that is strictly greater than its neighbors.
+
+Given an integer array `nums`, find a peak element, and return its index. If the array contains multiple peaks, return the index to **any of the peaks**.
+
+You may imagine that `nums[-1] = nums[n] = -∞`.
+
+You must write an algorithm that runs in `O(log n)` time.
+
+ 
+
+**Example 1:**
+
+```
+Input: nums = [1,2,3,1]
+Output: 2
+Explanation: 3 is a peak element and your function should return the index number 2.
+```
+
+**Example 2:**
+
+```
+Input: nums = [1,2,1,3,5,6,4]
+Output: 5
+Explanation: Your function can return either index number 1 where the peak element is 2, or index number 5 where the peak element is 6.
+```
+
+## 题目大意
+
+寻找局部最大值，并返回它的索引
+
+## 思路
+
+利用二分查找法，如果mid右边的比mid大，那就在右边找，否则就在左边找
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int n = nums.size();
+        int l = 0, r = n - 1;
+        while(l < r){
+            int mid = (l + r) / 2;
+            if(nums[mid+1] > nums[mid]) l = mid + 1;
+            else r = mid;
+        }
+        return l;
+    }
+};
+```
+
+# 166. Fraction to Recurring Decimal
+
+## 题目
+
+Given two integers representing the `numerator` and `denominator` of a fraction, return *the fraction in string format*.
+
+If the fractional part is repeating, enclose the repeating part in parentheses.
+
+If multiple answers are possible, return **any of them**.
+
+It is **guaranteed** that the length of the answer string is less than `104` for all the given inputs.
+
+ 
+
+**Example 1:**
+
+```
+Input: numerator = 1, denominator = 2
+Output: "0.5"
+```
+
+**Example 2:**
+
+```
+Input: numerator = 2, denominator = 1
+Output: "2"
+```
+
+**Example 3:**
+
+```
+Input: numerator = 4, denominator = 333
+Output: "0.(012)"
+```
+
+## 题目大意
+
+给定除数和被除数，求出商并用字符串表示，如果小数部分有循环的话就要用括号括起来。
+
+## 思路
+
+能够除得尽都很好处理，当有循环的时候，会出现余数相同的时候，这时候就在余数相同的位置插上括号。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    unordered_map<long, int> mp;
+    string fractionToDecimal(int numerator, int denominator) {
+        if(!numerator) return "0";
+        string ans = "";
+        if(numerator < 0 ^ denominator < 0) ans += "-";
+        long num = labs(numerator);
+        long den = labs(denominator);
+        long f = num / den;
+        long mod = num % den;
+        ans += to_string(f);
+        if(!mod) return ans;
+        
+        ans += ".";
+        while(mod){
+            if(mp.count(mod)){
+                int idx = mp[mod];
+                ans.insert(idx, "(");
+                ans += ")";
+                break;
+            }else{
+                mp[mod] = ans.size();
+                mod *= 10;
+                f = mod / den;
+                mod %= den;
+                ans += to_string(f);
+            }
+        }
+        return ans;
+    }
+};
+```
+
