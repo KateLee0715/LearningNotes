@@ -1509,3 +1509,484 @@ public:
 };
 ```
 
+# 172. Factorial Trailing Zeroes
+
+## 题目
+
+Given an integer `n`, return *the number of trailing zeroes in* `n!`.
+
+Note that `n! = n * (n - 1) * (n - 2) * ... * 3 * 2 * 1`.
+
+ 
+
+**Example 1:**
+
+```
+Input: n = 3
+Output: 0
+Explanation: 3! = 6, no trailing zero.
+```
+
+**Example 2:**
+
+```
+Input: n = 5
+Output: 1
+Explanation: 5! = 120, one trailing zero.
+```
+
+**Example 3:**
+
+```
+Input: n = 0
+Output: 0
+```
+
+## 题目大意
+
+统计n的阶乘末尾有多少个0
+
+## 思路
+
+只有2和5相乘才会在末尾产生0，所以只需要统计2和5的数量，取最小值就是最终的答案。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int cnt2 = 0, cnt5 = 0;
+        int div2 = 2, div5 = 5;
+        while(div2 <= n){
+            cnt2 += n / div2;
+            div2 *= 2;
+        }
+        while(div5 <= n){
+            cnt5 += n / div5;
+            div5 *= 5;
+        }
+        int ans = min(cnt5, cnt2);
+        return ans;
+    }
+};
+```
+
+# 179. Largest Number
+
+## 题目
+
+Given a list of non-negative integers `nums`, arrange them such that they form the largest number and return it.
+
+Since the result may be very large, so you need to return a string instead of an integer.
+
+ 
+
+**Example 1:**
+
+```
+Input: nums = [10,2]
+Output: "210"
+```
+
+**Example 2:**
+
+```
+Input: nums = [3,30,34,5,9]
+Output: "9534330"
+```
+
+## 题目大意
+
+给定一些数，将它们拼接成最大的一个数
+
+## 思路
+
+定义一个排序函数，当a和b拼接起来比b和a拼接起来大时，a排在b的前面。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    static bool cmp(string a, string b){
+        return a + b > b + a;
+    }
+    
+    string largestNumber(vector<int>& nums) {
+        vector<string> str;
+        string ans = "";
+        int n = nums.size();
+        for(int i = 0; i < n; i++){
+            str.push_back(to_string(nums[i]));
+        }
+        sort(str.begin(), str.end(), cmp);
+        
+        if(str[0] == "0") return "0";
+        
+        for(int i = 0; i < n; i++){
+            ans += str[i];
+        }
+        
+        return ans;
+    }
+};
+```
+
+# 204. Count Primes
+
+## 题目
+
+Given an integer `n`, return *the number of prime numbers that are strictly less than* `n`.
+
+ 
+
+**Example 1:**
+
+```
+Input: n = 10
+Output: 4
+Explanation: There are 4 prime numbers less than 10, they are 2, 3, 5, 7.
+```
+
+**Example 2:**
+
+```
+Input: n = 0
+Output: 0
+```
+
+**Example 3:**
+
+```
+Input: n = 1
+Output: 0
+```
+
+## 题目大意
+
+求n的前面有多少个素数。
+
+## 思路
+
+模板题，排除掉0、1和合数后剩下的就是素数。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int primes[5000005];
+    bool st[5000005];
+    int countPrimes(int n) {
+        if(n == 0 || n == 1) return 0;
+        int cnt = 0;
+        
+        for(int i = 2; i < n; i++){
+            if(!st[i]){
+                primes[cnt++] = i;
+            }
+            for(int j = 0; primes[j] * i < n; j++){
+                st[primes[j] * i] = true;
+                if(i % primes[j] == 0) break;
+            }
+        }
+        
+        return cnt;
+    }
+};
+```
+
+# 227. Basic Calculator II
+
+## 题目
+
+Given a string `s` which represents an expression, *evaluate this expression and return its value*. 
+
+The integer division should truncate toward zero.
+
+You may assume that the given expression is always valid. All intermediate results will be in the range of `[-231, 231 - 1]`.
+
+**Note:** You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as `eval()`.
+
+ 
+
+**Example 1:**
+
+```
+Input: s = "3+2*2"
+Output: 7
+```
+
+**Example 2:**
+
+```
+Input: s = " 3/2 "
+Output: 1
+```
+
+**Example 3:**
+
+```
+Input: s = " 3+5 / 2 "
+Output: 5
+```
+
+## 题目大意
+
+给定一个式子，计算它的值。
+
+## 思路
+
+一开始直接建立一个数字栈和一个符号栈来进行计算，发现既费时又费空间，后来看了解答，因为只有加减乘除四种符号，所以可以不建栈，遇到乘除可以直接计算，遇到加减结果可以加上加减号前面的那个数，减去一个数可以看做加上一个负数。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int calculate(string s) {
+        int n = s.size();
+        int cur = 0, last = 0, res = 0;
+        char sign = '+';
+        for(int i = 0; i < n; i++){
+            // if(s[i] == ' ') continue;
+            char ops = s[i];
+            if(isdigit(ops)){
+                cur = cur * 10 + (ops - '0');
+            }
+            if(!isdigit(ops) && s[i] != ' ' || i == n - 1){
+                if(sign == '+' || sign == '-'){
+                    res += last;
+                    last = sign == '+'? cur : -cur;
+                }else if(sign == '/'){
+                    last /= cur;
+                }else if(sign == '*'){
+                    last *= cur;
+                }
+                cur = 0;
+                sign = ops;
+            }
+        }
+        res += last;
+        return res;
+    }
+};
+```
+
+栈的解法：
+
+```c++
+class Solution {
+public:
+    int cal(char op, int num1, int num2){
+        if(op == '+'){
+            return num1 + num2;
+        }else if(op == '-'){
+            return num1 - num2;
+        }else if(op == '*'){
+            return num1 * num2;
+        }else{
+            return num1 / num2;
+        }
+    }
+    
+    int calculate(string s) {
+        int n = s.size();
+        string num = "";
+        stack<int> nums;
+        stack<char> ops;
+        for(int i = 0; i < n; i++){
+            if(s[i] == ' ') continue;
+            if(!isdigit(s[i])){
+                nums.push(stoi(num));
+                num = "";
+                if(s[i] == '+' || s[i] == '-'){
+                    while(!ops.empty()){
+                        char op = ops.top();
+                        ops.pop();
+                        int num2 = nums.top();
+                        nums.pop();
+                        int num1 = nums.top();
+                        nums.pop();
+                        int res = cal(op, num1, num2);
+                        nums.push(res);
+                    }
+                    ops.push(s[i]);
+                }else{
+                    while(!ops.empty() && (ops.top() == '*' || ops.top() == '/')){
+                            char op = ops.top();
+                            ops.pop();
+                            int num2 = nums.top();
+                            nums.pop();
+                            int num1 = nums.top();
+                            nums.pop();
+                            int res = cal(op, num1, num2);
+                            nums.push(res);
+                    }
+                    ops.push(s[i]);
+                }
+            }else{
+                num += s[i];
+            }
+        }
+        nums.push(stoi(num));
+        while(!ops.empty()){
+            char op = ops.top();
+            ops.pop();
+            int num2 = nums.top();
+            nums.pop();
+            int num1 = nums.top();
+            nums.pop();
+            int res = cal(op, num1, num2);
+            nums.push(res);
+        }
+        return nums.top();
+    }
+};
+```
+
+# 289. Game of Life
+
+## 题目
+
+According to [Wikipedia's article](https://en.wikipedia.org/wiki/Conway's_Game_of_Life): "The **Game of Life**, also known simply as **Life**, is a cellular automaton devised by the British mathematician John Horton Conway in 1970."
+
+The board is made up of an `m x n` grid of cells, where each cell has an initial state: **live** (represented by a `1`) or **dead** (represented by a `0`). Each cell interacts with its [eight neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood) (horizontal, vertical, diagonal) using the following four rules (taken from the above Wikipedia article):
+
+1. Any live cell with fewer than two live neighbors dies as if caused by under-population.
+2. Any live cell with two or three live neighbors lives on to the next generation.
+3. Any live cell with more than three live neighbors dies, as if by over-population.
+4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+
+The next state is created by applying the above rules  simultaneously to every cell in the current state, where births and  deaths occur simultaneously. Given the current state of the `m x n` grid `board`, return *the next state*.
+
+ 
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2020/12/26/grid1.jpg)
+
+```
+Input: board = [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]
+Output: [[0,0,0],[1,0,1],[0,1,1],[0,1,0]]
+```
+
+**Example 2:**
+
+![img](https://assets.leetcode.com/uploads/2020/12/26/grid2.jpg)
+
+```
+Input: board = [[1,1],[1,0]]
+Output: [[1,1],[1,1]]
+```
+
+## 题目大意
+
+一个格子附近的8个格子都是它的邻居，一个为1的格子只有附近有2个或3个为1的格子才能保持为1，否则为0；一个为0的格子只有附近有3个为1的格子才能为1，否则保持为0。
+
+## 思路
+
+每遍历一个格子都要遍历它的邻居，判断这个格子是否需要改变，如果需要改变就加2，对2求余就能知道这个格子原来的状态。最后输出格子的最终状态，大于等于2的就用3去减，来实现状态的更改，小于2的就不用变。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    bool change(vector<vector<int>>& board, int x, int y){
+        int cnt = 0;
+        int m = board.size(), n = board[0].size();
+        for(int i = -1; i <= 1; i++){
+            if(x + i < 0 || x + i >= m) continue;
+            for(int j = -1; j <= 1; j++){
+                if(i == 0 && j == 0) continue;
+                else if(y + j < 0 || y + j >= n) continue;
+                cnt += board[x+i][y+j] % 2;
+            }
+        }
+        
+        if(board[x][y] && (cnt < 2 || cnt > 3)) return true;
+        else if(!board[x][y] && cnt == 3) return true;
+        else return false;
+    }
+    
+    void gameOfLife(vector<vector<int>>& board) {
+        int m = board.size(), n = board[0].size();
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(change(board, i, j)){
+                    board[i][j] += 2;
+                }
+            }
+        }
+        
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                board[i][j] = board[i][j] >= 2? 3 - board[i][j] : board[i][j];
+            }
+        }
+    }
+};
+```
+
+# 300. Longest Increasing Subsequence
+
+## 题目
+
+Given an integer array `nums`, return the length of the longest strictly increasing subsequence.
+
+A **subsequence** is a sequence that can be derived from an array by deleting some or no elements without changing the order of  the remaining elements. For example, `[3,6,2,7]` is a subsequence of the array `[0,3,1,6,2,2,7]`.
+
+ 
+
+**Example 1:**
+
+```
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+```
+
+## 题目大意
+
+求最长严格上升子序列
+
+## 思路
+
+采用二分查找+贪心的方法，遍历数组构建一个严格上升的序列，如果当前元素大于序列的最后一位，则将该元素添加到序列最后；否则用二分查找找到大于等于该元素的最小元素的位置，将其放入，因为该数越小意味着能找到比它大的数的概率越大，其后面能接的数就越多。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int search(int dp[], int pos, int num){
+        int l = 0, r = pos;
+        while(l < r){
+            int mid = (l + r) / 2;
+            if(num <= dp[mid]) r = mid;
+            else l = mid + 1;
+        }
+        
+        return l;
+    }
+    
+    int lengthOfLIS(vector<int>& nums) {
+        int pos = 0;
+        int dp[2505] = {0};
+        dp[pos] = nums[0];
+        int n = nums.size();
+        for(int i = 1; i < n; i++){
+            if(nums[i] > dp[pos]){
+                dp[++pos] = nums[i];
+            }else{
+                int tmp = search(dp, pos, nums[i]);
+                dp[tmp] = nums[i];
+            }
+        }
+        return pos + 1;
+    }
+};
+```
+
