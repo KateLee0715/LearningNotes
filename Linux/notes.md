@@ -366,3 +366,74 @@ tar
 <img src="images/2022-06-02-05-33-21.png" style="zoom:67%;">
 解压到指定目录
 <img src="images/2022-06-02-05-39-23.png" style="zoom:67%;">
+
+## 组管理和权限管理
+在linux中每个用户必须属于一个组，每个文件有所有者、所在组和其他组的概念。
+<img src="images/2022-06-03-04-15-02.png" style="zoom:67%;">
+
+### 所有者
+一般为文件的创建者
+查看文件的所有者
+<img src="images/2022-06-03-11-46-58.png" style="zoom:67%;">
+前面的那一列为所有者
+
+修改文件所有者
+chown 用户名 文件名
+<img src="images/2022-06-03-11-50-03.png" style="zoom:67%;">
+<img src="images/2022-06-03-11-52-12.png" style="zoom:67%;">
+
+-R：如果是目录，则使其下所有子文件或目录递归生效
+<img src="images/2022-06-04-16-16-27.png" style="zoom:67%;">
+<img src="images/2022-06-04-16-17-02.png" style="zoom:67%;">
+<img src="images/2022-06-04-16-18-55.png" style="zoom:67%;">
+<img src="images/2022-06-04-16-19-33.png" style="zoom:67%;">
+chown newowner:newgroup 文件/目录（改变所有者和所在组）
+
+
+### 所在组
+查看文件所在组
+<img src="images/2022-06-03-12-07-04.png" style="zoom:67%;">
+<img src="images/2022-06-03-15-06-38.png" style="zoom:67%;">
+后面的一列为所在组
+
+修改文件所在的组
+chgrp 组名 文件名
+<img src="images/2022-06-03-15-11-55.png" style="zoom:67%;">
+<img src="images/2022-06-03-15-12-45.png" style="zoom:67%;">
+<img src="images/2022-06-03-15-13-28.png" style="zoom:67%;">
+
+-R：如果是目录，则使其下所有子文件或目录递归生效
+<img src="images/2022-06-04-16-27-20.png" style="zoom:67%;">
+<img src="images/2022-06-04-16-28-21.png" style="zoom:67%;">
+<img src="images/2022-06-04-16-28-50.png" style="zoom:67%;">
+<img src="images/2022-06-04-16-29-49.png" style="zoom:67%;">
+
+改变用户所在组
+usermod -g 新组名 用户名
+<img src="images/2022-06-03-15-31-36.png" style="zoom:67%;">
+usermod -d 新目录 用户名：改变用户的家目录。**特别说明**：用户有进入到新目录的权限
+
+### 权限的基本介绍
+<img src="images/2022-06-03-18-33-35.png" style="zoom:67%;">
+
+### rwx权限详解
+<img src="images/2022-06-03-18-38-03.png" style="zoom:67%;">
+<img src="images/2022-06-03-18-47-10.png" style="zoom:67%;">
+
+### 修改权限
+chmod：修改文件或目录的权限
+u：所有者 g：所在组 o：其他组 a：所有人
+chmod u=rwx,g=rx,o=x 文件/目录名
+<img src="images/2022-06-04-15-39-01.png" style="zoom:67%;">
+<img src="images/2022-06-04-15-41-48.png" style="zoom:67%;">
+chmod o+w 文件/目录名
+<img src="images/2022-06-04-15-45-14.png" style="zoom:67%;">
+chmod a-x 文件/目录名
+<img src="images/2022-06-04-15-48-16.png" style="zoom:67%;">
+
+通过数字变更权限
+r=4 w=2 x=1 rwx=4+2+1=7
+chmod u=rwx,g=rx,o=x 文件/目录名
+相当于chmod 751 文件/目录名
+<img src="images/2022-06-04-16-04-47.png" style="zoom:67%;">
+<img src="images/2022-06-04-16-05-28.png" style="zoom:67%;">
