@@ -1990,3 +1990,159 @@ public:
 };
 ```
 
+# 322. Coin Change
+
+## 题目
+
+You are given an integer array `coins` representing coins of different denominations and an integer `amount` representing a total amount of money.
+
+Return *the fewest number of coins that you need to make up that amount*. If that amount of money cannot be made up by any combination of the coins, return `-1`.
+
+You may assume that you have an infinite number of each kind of coin.
+
+ 
+
+**Example 1:**
+
+```
+Input: coins = [1,2,5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+```
+
+**Example 2:**
+
+```
+Input: coins = [2], amount = 3
+Output: -1
+```
+
+**Example 3:**
+
+```
+Input: coins = [1], amount = 0
+Output: 0
+```
+
+## 题目大意
+
+给定一些面额的硬币，每种面额都有无数个硬币，给定一个金额，求组成这个金额所用的最少硬币数，如果无法组成这个金额，则返回-1。
+
+## 思路
+
+先判断这些面额能否组成这个金额，如果金额除不尽这些面额的最大公因数，则一定不能组成（好像有这个定理）；然后就是完全背包问题，最后还要再判断一下能不能组成（最后返回的值是否等于最大值）。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int gcd(int a, int b){
+        return b == 0? a : gcd(b, a % b);
+    }
+    
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        int tmp = coins[0];
+        for(int i = 1; i < n; i++){
+            tmp = gcd(tmp, coins[i]);
+        }
+        if(amount % tmp) return -1;
+        vector<int> dp(amount+1, 10005);
+        dp[0] = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = coins[i]; j <= amount; j++){
+                dp[j] = min(dp[j], dp[j - coins[i]] + 1);
+            }
+        }
+        if(dp[amount] == 10005) return -1;
+        return dp[amount];
+    }
+};
+```
+
+# 324. Wiggle Sort II
+
+## 题目
+
+Given an integer array `nums`, reorder it such that `nums[0] < nums[1] > nums[2] < nums[3]...`.
+
+You may assume the input array always has a valid answer.
+
+ 
+
+**Example 1:**
+
+```
+Input: nums = [1,5,1,1,6,4]
+Output: [1,6,1,5,1,4]
+Explanation: [1,4,1,5,1,6] is also accepted.
+```
+
+**Example 2:**
+
+```
+Input: nums = [1,3,2,2,3,1]
+Output: [2,3,1,3,1,2]
+```
+
+## 题目大意
+
+给定一个整数数组，将其重新排序，使得偶数位上的数比两边的小，奇数位上的数比两边的大。
+
+## 思路
+
+**解法一**：将数组从小到大排序，前半部分放在偶数位，后半部分放在奇数位（P.S. 无论前半部分还是后半部分都要从后往前遍历）
+
+**解法二**：将中间大的数放在中间，在这个数前面的比它小，在这个数后面的比它大，偶数位的指针从后往前遍历，奇数位的指针从前往后遍历，还有一个当前指针遍历整个数组。反正奇数位上的数要比中间数大，偶数位上的数要比中间数小。
+
+## 代码
+
+**解法一**：
+
+```c++
+class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        vector<int> tmp(n, 0);
+        int half = (n - 1) / 2;
+        for(int k = 0, i = half, j = n-1; k < n && (i >= 0 || j > half); k+=2, i--, j--){
+            tmp[k] = nums[i];
+            if(k + 1 < n){
+                tmp[k+1] = nums[j];
+            }
+        }
+        
+        nums = tmp;
+    }
+};
+```
+
+**解法二**：
+
+```c++
+class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        int len = nums.size();
+        nth_element(nums.begin(), nums.begin() + len/2, nums.end());
+        int mid = *(nums.begin() + len/2);
+        int small = len % 2? len - 1: len - 2;
+        int large = 1;
+        int cur = 0;
+        
+        while(cur < len){
+            if(nums[cur] < mid && (cur < small || (cur > small && cur % 2))){
+                swap(nums[cur], nums[small]);
+                small -= 2;
+            }else if(nums[cur] > mid && (cur > large || (cur < large && !(cur % 2)))){
+                swap(nums[cur], nums[large]);
+                large += 2;
+            }else cur++;
+        }
+    }
+};
+```
+
