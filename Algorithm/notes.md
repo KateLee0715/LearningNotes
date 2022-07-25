@@ -2146,3 +2146,764 @@ public:
 };
 ```
 
+# 328. Odd Even Linked List
+
+## 题目
+
+Given the `head` of a singly linked list, group all the nodes with odd indices together followed by the nodes with even indices, and return *the reordered list*.
+
+The **first** node is considered **odd**, and the **second** node is **even**, and so on.
+
+Note that the relative order inside both the even and odd groups should remain as it was in the input.
+
+You must solve the problem in `O(1)` extra space complexity and `O(n)` time complexity.
+
+ 
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/03/10/oddeven-linked-list.jpg)
+
+```
+Input: head = [1,2,3,4,5]
+Output: [1,3,5,2,4]
+```
+
+**Example 2:**
+
+![img](https://assets.leetcode.com/uploads/2021/03/10/oddeven2-linked-list.jpg)
+
+```
+Input: head = [2,1,3,5,6,4,7]
+Output: [2,3,6,7,1,5,4]
+```
+
+## 题目大意
+
+把奇数项排在前面，把偶数项排在后面
+
+## 思路
+
+cur代表当前节点，odd代表奇数项，even代表偶数项。把odd放在cur的后面，更新odd，even，cur
+
+## 代码
+
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if(head == nullptr || head->next == nullptr || head->next->next == nullptr){
+            return head;
+        }
+        
+        ListNode* cur = head, *even = head->next, *odd = head->next->next;
+        
+        while(odd){
+            even->next = odd->next;
+            odd->next = cur->next;
+            cur->next = odd;
+            even = even->next;
+            if(even){
+                odd = even->next;
+            }else odd = nullptr;
+            cur = cur->next;
+        }
+        
+        return head;
+    }
+};
+```
+
+# 334. Increasing Triplet Subsequence
+
+## 题目
+
+Given an integer array `nums`, return `true` *if there exists a triple of indices* `(i, j, k)` *such that* `i < j < k` *and* `nums[i] < nums[j] < nums[k]`. If no such indices exists, return `false`.
+
+ 
+
+**Example 1:**
+
+```
+Input: nums = [1,2,3,4,5]
+Output: true
+Explanation: Any triplet where i < j < k is valid.
+```
+
+**Example 2:**
+
+```
+Input: nums = [5,4,3,2,1]
+Output: false
+Explanation: No triplet exists.
+```
+
+**Example 3:**
+
+```
+Input: nums = [2,1,5,0,4,6]
+Output: true
+Explanation: The triplet (3, 4, 5) is valid because nums[3] == 0 < nums[4] == 4 < nums[5] == 6.
+```
+
+## 题目大意
+
+给定一个整数数列，如果存在三个索引`(i, j, k)`满足`i < j < k` 且 `nums[i] < nums[j] < nums[k]`，则返回true，否则返回false。
+
+## 思路
+
+i代表第一个数，j代表第二个数，i < j，遍历数组中的每一个数，如果当前的数小于等于i，替代i；否则（此时已大于i）如果当前的数小于等于j，替代j；否则（此时已大于j）就返回true。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    bool increasingTriplet(vector<int>& nums) {
+        int i = INT_MAX, j = INT_MAX, n = nums.size();
+        for(int k = 0; k < n; k++){
+            if(nums[k] <= i) i = nums[k];
+            else if(nums[k] <= j) j = nums[k];
+            else return true;
+        }
+        return false;
+    }
+};
+```
+
+# 341. Flatten Nested List Iterator
+
+## 题目
+
+You are given a nested list of integers `nestedList`. Each element is either an integer or a list whose elements may also be  integers or other lists. Implement an iterator to flatten it.
+
+Implement the `NestedIterator` class:
+
+- `NestedIterator(List<NestedInteger> nestedList)` Initializes the iterator with the nested list `nestedList`.
+- `int next()` Returns the next integer in the nested list.
+- `boolean hasNext()` Returns `true` if there are still some integers in the nested list and `false` otherwise.
+
+Your code will be tested with the following pseudocode:
+
+```
+initialize iterator with nestedList
+res = []
+while iterator.hasNext()
+    append iterator.next() to the end of res
+return res
+```
+
+If `res` matches the expected flattened list, then your code will be judged as correct.
+
+ 
+
+**Example 1:**
+
+```
+Input: nestedList = [[1,1],2,[1,1]]
+Output: [1,1,2,1,1]
+Explanation: By calling next repeatedly until hasNext returns false, the order of elements returned by next should be: [1,1,2,1,1].
+```
+
+**Example 2:**
+
+```
+Input: nestedList = [1,[4,[6]]]
+Output: [1,4,6]
+Explanation: By calling next repeatedly until hasNext returns false, the order of elements returned by next should be: [1,4,6].
+```
+
+## 题目大意
+
+实现一个类，要求如上。
+
+## 思路
+
+使用递归的思想实现，遍历当前list，如果当前元素是int，加入到结果list中，如果是list，则进入到这个list中遍历，返回遍历的结果（这个list），将这个list插入到当前的结果list中。
+
+用idx标记当前元素（next（）），用cnt标记元素的个数，看遍历完没有。
+
+## 代码
+
+```c++
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * class NestedInteger {
+ *   public:
+ *     // Return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     bool isInteger() const;
+ *
+ *     // Return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // The result is undefined if this NestedInteger holds a nested list
+ *     int getInteger() const;
+ *
+ *     // Return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // The result is undefined if this NestedInteger holds a single integer
+ *     const vector<NestedInteger> &getList() const;
+ * };
+ */
+
+class NestedIterator {
+private:
+    vector<int> res;
+    int idx = 0, cnt = 0;
+    
+    vector<int> flatten(vector<NestedInteger> &nested){
+        int n = nested.size();
+        vector<int> ans, tmp;
+        for(int i = 0; i < n; i++){
+            if(nested[i].isInteger()){
+                ans.push_back(nested[i].getInteger());
+            }else{
+                tmp = flatten(nested[i].getList());
+                ans.insert(ans.end(), tmp.begin(), tmp.end());
+            }
+        }
+        return ans;
+    }
+    
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        res = flatten(nestedList);
+        cnt = res.size();
+    }
+    
+    int next() {
+        return res[idx++];
+    }
+    
+    bool hasNext() {
+        return idx < cnt;
+    }
+};
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i(nestedList);
+ * while (i.hasNext()) cout << i.next();
+ */
+```
+
+# 347. Top K Frequent Elements
+
+## 题目
+
+Given an integer array `nums` and an integer `k`, return *the* `k` *most frequent elements*. You may return the answer in **any order**.
+
+ 
+
+**Example 1:**
+
+```
+Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]
+```
+
+**Example 2:**
+
+```
+Input: nums = [1], k = 1
+Output: [1]
+```
+
+## 题目大意
+
+找出k个在数组中出现得最频繁的数
+
+## 思路
+
+用unordered_map将每个数出现的次数记录下来，再将他们存进priority_queue中，取出前k个。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    unordered_map<int, int> cnt;
+    priority_queue<pair<int, int>> heap;
+    
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> ans;
+        int n = nums.size();
+        for(int i = 0; i < n; i++){
+            cnt[nums[i]]++;
+        }
+        for(auto a : cnt){
+            heap.push({a.second, a.first});
+        }
+        for(int i = 0; i < k; i++){
+            ans.push_back(heap.top().second);
+            heap.pop();
+        }
+        return ans;
+    }
+};
+```
+
+# 371. Sum of Two Integers
+
+## 题目
+
+Given two integers `a` and `b`, return *the sum of the two integers without using the operators* `+` *and* `-`.
+
+ 
+
+**Example 1:**
+
+```
+Input: a = 1, b = 2
+Output: 3
+```
+
+**Example 2:**
+
+```
+Input: a = 2, b = 3
+Output: 5
+```
+
+## 题目大意
+
+不用+和-，求两数之和。
+
+## 思路
+
+用^，将数简单地加起来（不考虑进位）；用&再<<1（要保证是正数），算出进位。一直循环，直到b为0。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int getSum(int a, int b) {
+        
+        while(b){
+            int c = a ^ b;
+            int d = (unsigned int)(a & b) << 1;
+            a = c;
+            b = d;
+        }
+        
+        return a;
+    }
+};
+```
+
+# 378. Kth Smallest Element in a Sorted Matrix
+
+## 题目
+
+Given an `n x n` `matrix` where each of the rows and columns is sorted in ascending order, return *the* `kth` *smallest element in the matrix*.
+
+Note that it is the `kth` smallest element **in the sorted order**, not the `kth` **distinct** element.
+
+You must find a solution with a memory complexity better than `O(n2)`.
+
+ 
+
+**Example 1:**
+
+```
+Input: matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8
+Output: 13
+Explanation: The elements in the matrix are [1,5,9,10,11,12,13,13,15], and the 8th smallest number is 13
+```
+
+**Example 2:**
+
+```
+Input: matrix = [[-5]], k = 1
+Output: -5
+```
+
+## 题目大意
+
+给定一个矩阵，矩阵的行和列都是升序排序的，求矩阵中第k小的元素。
+
+## 思路
+
+全程使用二分查找法。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int search(vector<int>& mat, int l, int r, int num){
+        while(l < r){
+            int mid = (l + r) / 2;
+            if(num >= mat[mid]) l = mid + 1;
+            else r = mid;
+        }
+        
+        if(mat[l] <= num) l++;
+        return l;
+    }
+    
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int n = matrix.size();
+        int l = matrix[0][0], r = matrix[n-1][n-1];
+        while(l <= r){
+            int cnt = 0;
+            int mid = (l + r) / 2;
+            for(int i = 0; i < n; i++){
+                cnt += upper_bound(matrix[i].begin(), matrix[i].end(), mid) - matrix[i].begin();
+                // cnt += search(matrix[i], 0, n - 1, mid);
+            }
+            
+            if(cnt < k) l = mid + 1;
+            else r = mid - 1;
+        }
+        
+        
+        return l;
+    }
+};
+```
+
+# 380. Insert Delete GetRandom O(1)
+
+## 题目
+
+Implement the `RandomizedSet` class:
+
+- `RandomizedSet()` Initializes the `RandomizedSet` object.
+- `bool insert(int val)` Inserts an item `val` into the set if not present. Returns `true` if the item was not present, `false` otherwise.
+- `bool remove(int val)` Removes an item `val` from the set if present. Returns `true` if the item was present, `false` otherwise.
+- `int getRandom()` Returns a random element from the  current set of elements (it's guaranteed that at least one element  exists when this method is called). Each element must have the **same probability** of being returned.
+
+You must implement the functions of the class such that each function works in **average** `O(1)` time complexity.
+
+ 
+
+**Example 1:**
+
+```
+Input
+["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]
+[[], [1], [2], [2], [], [1], [2], []]
+Output
+[null, true, false, true, 2, true, false, 2]
+
+Explanation
+RandomizedSet randomizedSet = new RandomizedSet();
+randomizedSet.insert(1); // Inserts 1 to the set. Returns true as 1 was inserted successfully.
+randomizedSet.remove(2); // Returns false as 2 does not exist in the set.
+randomizedSet.insert(2); // Inserts 2 to the set, returns true. Set now contains [1,2].
+randomizedSet.getRandom(); // getRandom() should return either 1 or 2 randomly.
+randomizedSet.remove(1); // Removes 1 from the set, returns true. Set now contains [2].
+randomizedSet.insert(2); // 2 was already in the set, so return false.
+randomizedSet.getRandom(); // Since 2 is the only number in the set, getRandom() will always return 2.
+```
+
+## 题目大意
+
+定义一个随机集合，可以增加任一不存在元素，删除任一存在元素，且随机获取集合中的一个数，平均时间复杂度均为O(1)。
+
+## 思路
+
+定义一个unordered_map（相当于哈希表），一个vector，可以用前者判断该元素是否已存在，记录每个值的索引。
+
+## 代码
+
+```c++
+class RandomizedSet {
+private:
+    unordered_map<int, int> mp;
+    vector<int> nums;
+    
+public:
+    RandomizedSet() {
+        
+    }
+    
+    bool insert(int val) {
+        if(mp.count(val)) return false;
+        else{
+            nums.push_back(val);
+            mp[val] = nums.size() - 1;
+            return true;
+        }
+    }
+    
+    bool remove(int val) {
+        if(!mp.count(val)) return false;
+        else{
+            int idx = mp[val];
+            swap(nums[idx], nums[nums.size()-1]);
+            mp[nums[idx]] = idx;
+            nums.pop_back();
+            mp.erase(mp.find(val));
+            return true;
+        }
+    }
+    
+    int getRandom() {
+        return nums[rand() % nums.size()];
+    }
+};
+
+/**
+ * Your RandomizedSet object will be instantiated and called as such:
+ * RandomizedSet* obj = new RandomizedSet();
+ * bool param_1 = obj->insert(val);
+ * bool param_2 = obj->remove(val);
+ * int param_3 = obj->getRandom();
+ */
+```
+
+# 384. Shuffle an Array
+
+## 题目
+
+Given an integer array `nums`, design an algorithm to randomly shuffle the array. All permutations of the array should be **equally likely** as a result of the shuffling.
+
+Implement the `Solution` class:
+
+- `Solution(int[] nums)` Initializes the object with the integer array `nums`.
+- `int[] reset()` Resets the array to its original configuration and returns it.
+- `int[] shuffle()` Returns a random shuffling of the array.
+
+ 
+
+**Example 1:**
+
+```
+Input
+["Solution", "shuffle", "reset", "shuffle"]
+[[[1, 2, 3]], [], [], []]
+Output
+[null, [3, 1, 2], [1, 2, 3], [1, 3, 2]]
+
+Explanation
+Solution solution = new Solution([1, 2, 3]);
+solution.shuffle();    // Shuffle the array [1,2,3] and return its result.
+                       // Any permutation of [1,2,3] must be equally likely to be returned.
+                       // Example: return [3, 1, 2]
+solution.reset();      // Resets the array back to its original configuration [1,2,3]. Return [1, 2, 3]
+solution.shuffle();    // Returns the random shuffling of array [1,2,3]. Example: return [1, 3, 2]
+```
+
+## 题目大意
+
+完成一个类，给定一个整数数组，完成打乱、重置的功能，且打乱的每个排列组合的出现都要是等可能性的。
+
+## 思路
+
+重置将原始的保存下来即可，打乱采用Fisher-Yates算法（随机排列）。
+
+## 代码
+
+```c++
+class Solution {
+private:
+    vector<int> origin;
+    vector<int> shf;
+    
+public:
+    Solution(vector<int>& nums) {
+        origin = nums;
+        shf = nums;
+    }
+    
+    vector<int> reset() {
+        return origin;
+    }
+    
+    vector<int> shuffle() {
+        int n = shf.size();
+        for(int i = n - 1; i > 0; i--){
+            swap(shf[i], shf[rand() % (i+1)]);
+        }
+        return shf;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(nums);
+ * vector<int> param_1 = obj->reset();
+ * vector<int> param_2 = obj->shuffle();
+ */
+```
+
+# 395. Longest Substring with At Least K Repeating Characters
+
+## 题目
+
+Given a string `s` and an integer `k`, return *the length of the longest substring of* `s` *such that the frequency of each character in this substring is greater than or equal to* `k`.
+
+ 
+
+**Example 1:**
+
+```
+Input: s = "aaabb", k = 3
+Output: 3
+Explanation: The longest substring is "aaa", as 'a' is repeated 3 times.
+```
+
+**Example 2:**
+
+```
+Input: s = "ababbc", k = 2
+Output: 5
+Explanation: The longest substring is "ababb", as 'a' is repeated 2 times and 'b' is repeated 3 times.
+```
+
+## 题目大意
+
+求一个字符串中每个字母出现的次数大于等于k的最长子串。
+
+## 思路
+
+**Intuition**
+
+There is another intuitive method to solve the problem by using the  Sliding Window Approach. The sliding window slides over the string `s` and validates each character. Based on certain conditions, the sliding window either expands or shrinks.
+
+A substring is valid if each character has at least `k`  frequency. The main idea is to find all the valid substrings with a  different number of unique characters and track the maximum length.  Let's look at the algorithm in detail.
+
+**Algorithm**
+
+1. Find the number of unique characters in the string `s` and store the count in variable `maxUnique`. For `s` = `aabcbacad`, the unique characters are `a,b,c,d` and `maxUnique = 4`.
+2. Iterate over the string `s` with the value of `currUnique` ranging from `1` to `maxUnique`. In each iteration, `currUnique`  is the maximum number of unique characters that must be present in the sliding window.
+3. The sliding window starts at index `windowStart` and ends at index `windowEnd` and slides over string `s` until `windowEnd` reaches the end of string `s`. At any given point, we shrink or expand the window to ensure that the number of unique characters is not greater than `currUnique`.
+
+- If the number of unique character in the sliding window is less than or equal to `currUnique`, expand the window from the right by adding a character to the end of the window given by `windowEnd`
+- Otherwise, shrink the window from the left by removing a character from the start of the window given by `windowStart`.
+
+1. Keep track of the number of unique characters in the current sliding window having at least `k` frequency given by `countAtLeastK`. Update the result if all the characters in the window have at least `k` frequency.
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int longestSubstring(string s, int k) {
+        int ans = 0, n = s.size();
+        int maxUni = getMaxUnique(s);
+        int cnt[30] = {0};
+        
+        for(int uni = 1; uni <= maxUni; uni++){
+            int st = 0, ed = 0, cntK = 0, cur = 0;
+            memset(cnt, 0, sizeof(cnt));
+            while(ed < n){
+                if(cur <= uni){
+                    int idx = s[ed] - 'a';
+                    if(!cnt[idx]){
+                        cur++;
+                    }
+                    cnt[idx]++;
+                    if(cnt[idx] == k) cntK++;
+                    ed++;
+                }else{
+                    int idx = s[st] - 'a';
+                    if(cnt[idx] == 1){
+                        cur--;
+                    }
+                    if(cnt[idx] == k) cntK--;
+                    cnt[idx]--;
+                    st++;
+                }
+                
+                if(cur == uni && cur == cntK){
+                    ans = max(ans, ed - st);
+                }
+            }
+        }
+        return ans;
+    }
+    
+    int getMaxUnique(string s){
+        int cnt[30] = {0};
+        int n = s.size(), ans = 0;
+        for(int i = 0; i < n; i++){
+            if(!cnt[s[i] - 'a']){
+                ans++;
+                cnt[s[i] - 'a'] = 1;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+# 454. 4Sum II
+
+## 题目
+
+Given four integer arrays `nums1`, `nums2`, `nums3`, and `nums4` all of length `n`, return the number of tuples `(i, j, k, l)` such that:
+
+- `0 <= i, j, k, l < n`
+- `nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0`
+
+ 
+
+**Example 1:**
+
+```
+Input: nums1 = [1,2], nums2 = [-2,-1], nums3 = [-1,2], nums4 = [0,2]
+Output: 2
+Explanation:
+The two tuples are:
+1. (0, 0, 0, 1) -> nums1[0] + nums2[0] + nums3[0] + nums4[1] = 1 + (-2) + (-1) + 2 = 0
+2. (1, 1, 0, 0) -> nums1[1] + nums2[1] + nums3[0] + nums4[0] = 2 + (-1) + (-1) + 0 = 0
+```
+
+**Example 2:**
+
+```
+Input: nums1 = [0], nums2 = [0], nums3 = [0], nums4 = [0]
+Output: 1
+```
+
+## 题目大意
+
+给定四个数组`nums1`, `nums2`, `nums3`, 和 `nums4`，找出元组 `(i, j, k, l)` 的个数，使得：
+
+- `0 <= i, j, k, l < n`
+- `nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0`
+
+## 思路
+
+先嵌套遍历前两个数组，计算两个元素的和的个数；再嵌套遍历后两个数组，如果 `- nums3[k] - nums4[l]`这个数存在，则说明`nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0`成立，将 `- nums3[k] - nums4[l]`这个数的数量加入答案中。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+        unordered_map<int, int> mp;
+        int ans = 0, n = nums1.size();
+        
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                mp[nums1[i]+nums2[j]]++;
+            }
+        }
+        
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(mp.count(-nums3[i]-nums4[j])){
+                    ans += mp[-nums3[i]-nums4[j]];
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
+```
+
