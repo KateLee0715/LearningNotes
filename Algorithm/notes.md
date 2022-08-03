@@ -2907,3 +2907,458 @@ public:
 };
 ```
 
+# [剑指 Offer 03. 数组中重复的数字](https://leetcode.cn/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
+
+## 题目
+
+找出数组中重复的数字。
+
+
+在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
+
+示例 1：
+
+```
+输入：
+[2, 3, 1, 0, 2, 5, 3]
+输出：2 或 3 
+```
+
+## 题目大意
+
+找出给定数组中任意一个重复的数字。
+
+## 思路
+
+遍历数组中的每一个数，如果这个数的数值等于它的索引，则跳过；否则找到这个数作为索引对应的数，如果与之前那个数相等，则这个数就是重复的数；否则就对调这两个数，让之前那个数与它的索引值相等。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int findRepeatNumber(vector<int>& nums) {
+        int n = nums.size();
+        int idx = 0;
+
+        while(idx < n){
+            if(idx == nums[idx]){
+                idx++;
+                continue;
+            }
+
+            if(nums[nums[idx]] == nums[idx]) return nums[idx];
+            swap(nums[nums[idx]], nums[idx]);
+        }
+
+        return -1;
+    }
+};
+```
+
+# [剑指 Offer 04. 二维数组中的查找](https://leetcode.cn/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/)
+
+## 题目
+
+在一个 n * m 的二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个高效的函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+
+ 
+
+**示例:**
+
+现有矩阵 matrix 如下：
+
+```
+[
+  [1,   4,  7, 11, 15],
+  [2,   5,  8, 12, 19],
+  [3,   6,  9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30]
+]
+```
+
+给定 target = `5`，返回` true`。
+
+给定 target = `20`，返回 `false`。
+
+## 题目大意
+
+给定一个二维数组，每行和每列都单调递增，给定一个整数，判断数组中是否有该整数。
+
+## 思路
+
+把数组逆时针旋转45°，可以看出类似于一棵二叉排序树，左边的元素比它小，右边的元素比它大，所以从右上角开始遍历，如果该数比它小，则往左走；该数比它大，则往下走。找到返回true，找不到返回false。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    bool findNumberIn2DArray(vector<vector<int>>& matrix, int target) {
+        if(!matrix.size() || !matrix[0].size()) return false;
+        int n = matrix.size(), m = matrix[0].size();
+        int x = 0, y = m - 1;
+        while(x < n && y >= 0){
+            if(target == matrix[x][y]) return true;
+            else if(target > matrix[x][y]){
+                x++;
+            }else{
+                y--;
+            }
+        }
+
+        return false;
+    }
+};
+```
+
+# [剑指 Offer 05. 替换空格](https://leetcode.cn/problems/ti-huan-kong-ge-lcof/)
+
+## 题目
+
+请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
+
+ 
+
+**示例 1：**
+
+```
+输入：s = "We are happy."
+输出："We%20are%20happy."
+```
+
+## 题目大意
+
+把字符串 s 中的每个空格替换成"%20"。
+
+## 思路
+
+初始化ans=""，遍历整个字符串，如果遇到空格，则加上"%20"在末尾；否则加上原来的字符在末尾。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    string replaceSpace(string s) {
+        int n = s.size();
+        string ans = "";
+        for(int i = 0; i < n; i++){
+            if(s[i] == ' ') ans += "%20";
+            else ans += s[i];
+        }
+
+        return ans;
+    }
+};
+```
+
+# [剑指 Offer 06. 从尾到头打印链表](https://leetcode.cn/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/)
+
+## 题目
+
+输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。
+
+ 
+
+**示例 1：**
+
+```
+输入：head = [1,3,2]
+输出：[2,3,1]
+```
+
+## 题目大意
+
+将整个链表反过来输出。
+
+## 思路
+
+遍历整个链表，将每个元素依次放进vector里，再用reverse将其翻转。
+
+## 代码
+
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> reversePrint(ListNode* head) {
+        ListNode* p = head;
+        vector<int> ans;
+        while(p){
+            ans.push_back(p->val);
+            p = p->next;
+        }
+
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+```
+
+# [剑指 Offer 07. 重建二叉树](https://leetcode.cn/problems/zhong-jian-er-cha-shu-lcof/)
+
+## 题目
+
+输入某二叉树的前序遍历和中序遍历的结果，请构建该二叉树并返回其根节点。
+
+假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+
+ 
+
+**示例 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/tree.jpg)
+
+```
+Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+Output: [3,9,20,null,null,15,7]
+```
+
+**示例 2:**
+
+```
+Input: preorder = [-1], inorder = [-1]
+Output: [-1]
+```
+
+## 题目大意
+
+根据某二叉树的前序遍历和中序遍历，构建该二叉树
+
+## 思路
+
+采用递归的方法，在前序遍历中最左边的元素为父节点，在中序遍历中找到该节点的位置，左边的序列为左子树，右边的序列为右子树，在前序遍历中同样能找到对应子树的序列。
+
+## 代码
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    unordered_map<int, int> in;
+
+    TreeNode* tree(vector<int>& pre, int pl, int pr, int il, int ir){
+        if(pl > pr) return nullptr;
+        TreeNode* h = new TreeNode(pre[pl]);
+        int mid = in[pre[pl]];
+        h->left = tree(pre, pl+1, pl+mid-il, il, mid-1);
+        h->right = tree(pre, pl+mid-il+1, pr, mid+1, ir);
+        return h;
+    }
+
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        int n = inorder.size();
+        for(int i = 0; i < n; i++){
+            in[inorder[i]] = i;
+        }
+        return tree(preorder, 0, n-1, 0, n-1);
+    }
+};
+```
+
+# [剑指 Offer 09. 用两个栈实现队列](https://leetcode.cn/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
+
+## 题目
+
+用两个栈实现一个队列。队列的声明如下，请实现它的两个函数 `appendTail` 和 `deleteHead` ，分别完成在队列尾部插入整数和在队列头部删除整数的功能。(若队列中没有元素，`deleteHead` 操作返回 -1 )
+
+ 
+
+**示例 1：**
+
+```
+输入：
+["CQueue","appendTail","deleteHead","deleteHead"]
+[[],[3],[],[]]
+输出：[null,null,3,-1]
+```
+
+**示例 2：**
+
+```
+输入：
+["CQueue","deleteHead","appendTail","appendTail","deleteHead","deleteHead"]
+[[],[],[5],[2],[],[]]
+输出：[null,-1,null,null,5,2]
+```
+
+## 题目大意
+
+用两个栈实现一个队列，实现队尾插入和队头删除的功能。
+
+## 思路
+
+定义两个栈s1和s2，队尾插入时将元素插入到s1，队头删除时先判断s2是否有元素，如果有，则直接删除栈顶元素（s2的栈顶就是队头）；如果没有，则判断s1是否有元素，如果没有，则说明无元素可删，返回-1；如果有，则将s1的元素按序压到s2中，再删除s2的栈顶元素。
+
+## 代码
+
+```c++
+class CQueue {
+private:
+    stack<int> s1, s2;
+public:
+    CQueue() {
+
+    }
+    
+    void appendTail(int value) {
+        s1.push(value);
+    }
+    
+    int deleteHead() {
+        if(s2.size()){
+            int t = s2.top();
+            s2.pop();
+            return t;
+        }
+        if(s1.empty()) return -1;
+        while(s1.size()){
+            int t = s1.top();
+            s1.pop();
+            s2.push(t);
+        }
+        int res = s2.top();
+        s2.pop();
+        return res;
+    }
+};
+
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * CQueue* obj = new CQueue();
+ * obj->appendTail(value);
+ * int param_2 = obj->deleteHead();
+ */
+```
+
+# [剑指 Offer 10- I. 斐波那契数列](https://leetcode.cn/problems/fei-bo-na-qi-shu-lie-lcof/)
+
+## 题目
+
+写一个函数，输入 `n` ，求斐波那契（Fibonacci）数列的第 `n` 项（即 `F(N)`）。斐波那契数列的定义如下：
+
+```
+F(0) = 0,   F(1) = 1
+F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
+```
+
+斐波那契数列由 0 和 1 开始，之后的斐波那契数就是由之前的两数相加而得出。
+
+答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+
+ 
+
+**示例 1：**
+
+```
+输入：n = 2
+输出：1
+```
+
+**示例 2：**
+
+```
+输入：n = 5
+输出：5
+```
+
+## 题目大意
+
+求斐波那契（Fibonacci）数列的第 `n` 项。
+
+## 思路
+
+按题意来即可。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int fib(int n) {
+        int mod = 1000000007;
+        int f[105] = {0};
+        f[0] = 0;
+        f[1] = 1;
+        for(int i = 2; i <= n; i++){
+            f[i] = (f[i-2] + f[i-1]) % mod; 
+        }
+
+        return f[n];
+    }
+};
+```
+
+# [剑指 Offer 10- II. 青蛙跳台阶问题](https://leetcode.cn/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/)
+
+## 题目
+
+一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 `n` 级的台阶总共有多少种跳法。
+
+答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+
+**示例 1：**
+
+```
+输入：n = 2
+输出：2
+```
+
+**示例 2：**
+
+```
+输入：n = 7
+输出：21
+```
+
+**示例 3：**
+
+```
+输入：n = 0
+输出：1
+```
+
+## 题目大意
+
+一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 `n` 级的台阶总共有多少种跳法。
+
+## 思路
+
+站在台阶上时，青蛙可能是跳一级跳到该台阶上，也可能是跳两级跳到该台阶上，运用dp，把这两种可能性的跳法的数量加起来。
+
+## 代码
+
+```c++
+class Solution {
+public:
+    int numWays(int n) {
+        int mod = 1000000007;
+        int f[105] = {0};
+        f[1] = 1;
+        f[0] = 1;
+        for(int i = 2; i <= n; i++){
+            f[i] = (f[i-1] + f[i-2]) % mod;
+        }
+
+        return f[n];
+    }
+};
+```
+
